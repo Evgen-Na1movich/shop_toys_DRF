@@ -3,8 +3,8 @@ from django_filters import Filter
 from rest_framework import generics
 from rest_framework.views import APIView
 
-from toys.models import Toy
-from toys.serializer import ToySerializer
+from toys.models import Toy, Brend
+from toys.serializer import ToySerializer, BrendSerializer
 
 
 class APIToys(generics.ListCreateAPIView):
@@ -23,3 +23,13 @@ class APIToys(generics.ListCreateAPIView):
 class APIToysInfo(generics.RetrieveUpdateDestroyAPIView):
     queryset = Toy.objects.all()
     serializer_class = ToySerializer
+
+
+class BrendAPI(generics.ListCreateAPIView):
+    queryset = Brend.objects.all()
+    serializer_class = BrendSerializer
+
+
+class BrendAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Brend.objects.all()
+    serializer_class = BrendSerializer
