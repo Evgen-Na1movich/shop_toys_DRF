@@ -13,13 +13,13 @@ class Brend(models.Model):
 
 
 class Category(models.Model):
-    category = models.CharField(max_length=100, verbose_name="Категория")
+    name = models.CharField(max_length=100, verbose_name="Категория")
 
     class Meta:
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return self.category
+        return self.name
 
 
 class Toy(models.Model):

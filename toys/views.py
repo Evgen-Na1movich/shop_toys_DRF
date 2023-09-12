@@ -1,23 +1,24 @@
 from django.shortcuts import render
 from django_filters import Filter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
+from rest_framework.filters import SearchFilter
 from rest_framework.views import APIView
 
-from toys.models import Toy, Brend
-from toys.serializer import ToySerializer, BrendSerializer
+from toys.models import Toy, Brend, Category
+from toys.serializer import ToySerializer, BrendSerializer, CategorySerializer
 
 
-class APIToys(generics.ListCreateAPIView):
+class CategoryListAPI(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class ToysListAPIView(generics.ListCreateAPIView):
     queryset = Toy.objects.all()
     serializer_class = ToySerializer
-    filterset_class = Filter
-
-    # фильтрация по бренду
-    def get_queryset(self):
-        # получаем queryset, который есть и переопределяем его
-        queryset = super(APIToys, self).get_queryset()
-        queryset = queryset.filter(visible=True)
-        return queryset
+    filter_backends = [SearchFilter]
+    search_fields = ('categories', 'brend')
 
 
 class APIToysInfo(generics.RetrieveUpdateDestroyAPIView):
@@ -30,6 +31,13 @@ class BrendAPI(generics.ListCreateAPIView):
     serializer_class = BrendSerializer
 
 
-class BrendAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+class BrendListDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Brend.objects.all()
     serializer_class = BrendSerializer
+
+
+class ToysByCategoryAPIView(generics.ListCreateAPIView):
+    queryset = Toy.objects.all()
+    serializer_class = ToySerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_filds = ['categories' ]
