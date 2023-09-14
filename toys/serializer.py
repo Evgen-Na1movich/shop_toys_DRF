@@ -12,27 +12,26 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "username")
 
 
-class ToySerializer(serializers.ModelSerializer):
-    """Serializer для товара(игрушек)"""
+class CategorySerializer(serializers.ModelSerializer):
+    """Serializer для категорий"""
+
     class Meta:
-        model = Toy
-        fields = '__all__'
+        model = Category
+        fields = ('id', 'name')
 
 
 class BrendSerializer(serializers.ModelSerializer):
     """Serializer для бренда"""
+
     class Meta:
         model = Brend
-        fields = ['brend']
+        fields = ('brend',)
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    """Serializer для категорий"""
+class ToySerializer(serializers.ModelSerializer):
+    """Serializer для товара(игрушек)"""
+    categories = CategorySerializer(many=True)
+
     class Meta:
-        model = Category
-        fields = [
-            'id', 'name'
-        ]
-
-
-
+        model = Toy
+        fields = '__all__'
