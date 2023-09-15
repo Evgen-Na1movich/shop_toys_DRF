@@ -22,16 +22,19 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class BrendSerializer(serializers.ModelSerializer):
     """Serializer для бренда"""
+    # место id возвращается строковое представление объекта.
+    toys_by_brend = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Brend
-        fields = ('brend',)
+        fields = ('brend', 'toys_by_brend')
 
 
 class ToySerializer(serializers.ModelSerializer):
     """Serializer для товара(игрушек)"""
     categories = CategorySerializer(many=True)
+    brend = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Toy
-        fields = '__all__'
+        fields = ('name', 'brend', 'price', 'categories', 'gender', )

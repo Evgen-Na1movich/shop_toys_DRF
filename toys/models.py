@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Brend(models.Model):
-    brend = models.CharField(max_length=30, )
+    brend = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = 'Бренд'
@@ -26,10 +26,12 @@ class Toy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Игрушка')
     price = models.DecimalField(decimal_places=2, max_digits=10)
     count = models.PositiveIntegerField()
-    brend = models.ForeignKey(Brend, on_delete=models.SET_NULL, null=True, related_name='toys_by_brend')
     # у бренда может быть много игрушек
     # устанавливает NULL при удалении связоной строки в главной таблице. Удалив бренд, у игрушки будет Null
-    categories = models.ManyToManyField(Category, null=True, blank=True, related_name='cats')
+
+    brend = models.ForeignKey(Brend, on_delete=models.SET_NULL, null=True, related_name='toys_by_brend')
+    # Связь будет описана через вспомогательную модель ToysBYCategory
+    categories = models.ManyToManyField(Category, blank=True, null=True, related_name='cats')
     gender = models.CharField(max_length=50)
     discription = models.TextField(blank=True, null=True)
     visible = models.BooleanField(default=True)
@@ -37,6 +39,7 @@ class Toy(models.Model):
     class Meta:
         verbose_name_plural = 'Игрушки'
 
-
     def __str__(self):
         return self.name
+
+

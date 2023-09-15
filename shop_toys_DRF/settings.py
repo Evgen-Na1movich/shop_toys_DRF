@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'toys.apps.ToysConfig',
     'rest_framework',
     'django_filters',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
