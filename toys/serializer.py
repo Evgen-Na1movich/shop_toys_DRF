@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from toys.models import Toy, Brend, Category, ToyCategory
+from toys.models import Toy, Brend, Category, ToyCategory, Item
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    """Serializer для категорий"""
+    """Serializer для категорий."""
 
     # Вместо id возвращается строковое представление объекта.
     # toys_by_category = serializers.StringRelatedField(many=True, read_only=True)
@@ -24,7 +24,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class BrendSerializer(serializers.ModelSerializer):
-    """Serializer для бренда"""
+    """Serializer для бренда."""
 
     # Вместо id возвращается строковое представление объекта.
     # toys_by_brend = serializers.StringRelatedField(many=True, read_only=True)
@@ -35,8 +35,9 @@ class BrendSerializer(serializers.ModelSerializer):
 
 
 class ToySerializer(serializers.ModelSerializer):
-    """Serializer для товара(игрушек)"""
-    categories = CategorySerializer( many=True)
+    """Serializer для товара(игрушек)."""
+    categories = CategorySerializer(many=True)
+
     # brend = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -46,7 +47,7 @@ class ToySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Уберем список категорий из словаря validated_data и сохраним его
         categories = validated_data.pop('categories')
-        #создаем новую игрушку без категории
+        # создаем новую игрушку без категории
         toy = Toy.objects.create(**validated_data)
 
         # Для каждой категории из списка категорий
@@ -56,7 +57,18 @@ class ToySerializer(serializers.ModelSerializer):
                 **categories)
             # Поместим ссылку на каждую категорию во вспомогательную таблицу
             # Не забыв указать к какой игрушке оно относится
-            ToyCategory.objects.create(
+            Toy.objects.create(
                 category=current_categories, toy=toy)
         return toy
 
+
+class ItemSerializer(serializers.ModelSerializer):
+    """Serializer для позиции."""
+
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Toy.objects.all(),
+        required=True)
+
+    class Meta:
+        model = Item
+        fields = ('product', 'quantity',)
