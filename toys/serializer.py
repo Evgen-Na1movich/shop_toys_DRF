@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from toys.models import Toy, Brend, Category
+from toys.models import Toy, Brend, Category, ToyCategory
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,6 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     """Serializer для категорий"""
 
+    # Вместо id возвращается строковое представление объекта.
+    # toys_by_category = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Category
         fields = ('id', 'name')
@@ -22,19 +25,38 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class BrendSerializer(serializers.ModelSerializer):
     """Serializer для бренда"""
-    # место id возвращается строковое представление объекта.
-    toys_by_brend = serializers.StringRelatedField(many=True, read_only=True)
+
+    # Вместо id возвращается строковое представление объекта.
+    # toys_by_brend = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Brend
-        fields = ('brend', 'toys_by_brend')
+        fields = ('name', 'toys_by_brend')
 
 
 class ToySerializer(serializers.ModelSerializer):
     """Serializer для товара(игрушек)"""
-    categories = CategorySerializer(many=True)
-    brend = serializers.StringRelatedField(read_only=True)
+    categories = CategorySerializer( many=True)
+    # brend = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Toy
-        fields = ('name', 'brend', 'price', 'categories', 'gender', )
+        fields = ('name', 'brend', 'price', 'categories', 'gender',)
+
+    def create(self, validated_data):
+        # Уберем список категорий из словаря validated_data и сохраним его
+        categories = validated_data.pop('categories')
+        #создаем новую игрушку без категории
+        toy = Toy.objects.create(**validated_data)
+
+        # Для каждой категории из списка категорий
+        for category in categories:
+            # Создадим новую запись или получим существующий экземпляр из БД
+            current_categories, status = Category.objects.get_or_create(
+                **categories)
+            # Поместим ссылку на каждую категорию во вспомогательную таблицу
+            # Не забыв указать к какой игрушке оно относится
+            ToyCategory.objects.create(
+                category=current_categories, toy=toy)
+        return toy
+
