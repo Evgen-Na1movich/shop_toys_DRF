@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from toys.models import Toy, Brend, Category, ToyCategory, Item
+from toys.models import Toy, Brend, Category, Item
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,24 +42,24 @@ class ToySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Toy
-        fields = ('name', 'brend', 'price', 'categories', 'gender',)
+        fields = "__all__"
 
-    def create(self, validated_data):
-        # Уберем список категорий из словаря validated_data и сохраним его
-        categories = validated_data.pop('categories')
-        # создаем новую игрушку без категории
-        toy = Toy.objects.create(**validated_data)
-
-        # Для каждой категории из списка категорий
-        for category in categories:
-            # Создадим новую запись или получим существующий экземпляр из БД
-            current_categories, status = Category.objects.get_or_create(
-                **categories)
-            # Поместим ссылку на каждую категорию во вспомогательную таблицу
-            # Не забыв указать к какой игрушке оно относится
-            Toy.objects.create(
-                category=current_categories, toy=toy)
-        return toy
+    # def create(self, validated_data):
+    #     # Уберем список категорий из словаря validated_data и сохраним его
+    #     categories = validated_data.pop('categories')
+    #     # создаем новую игрушку без категории
+    #     toy = Toy.objects.create(**validated_data)
+    #
+    #     # Для каждой категории из списка категорий
+    #     for category in categories:
+    #         # Создадим новую запись или получим существующий экземпляр из БД
+    #         current_categories, status = Category.objects.create(
+    #             **categories)
+    #         # Поместим ссылку на каждую категорию во вспомогательную таблицу
+    #         # Не забыв указать к какой игрушке оно относится
+    #         Toy.objects.create(
+    #             category=current_categories, toy=toy)
+    #     return toy
 
 
 class ItemSerializer(serializers.ModelSerializer):

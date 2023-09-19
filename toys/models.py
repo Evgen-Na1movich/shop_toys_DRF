@@ -33,16 +33,17 @@ class GenderChoices(models.TextChoices):
 
 class Toy(models.Model):
     """Игрушка."""
-    name = models.CharField(max_length=100, verbose_name='Игрушка')
-    price = models.DecimalField(decimal_places=2, max_digits=10)
-    count = models.PositiveIntegerField()
-    brend = models.ForeignKey(Brend, on_delete=models.CASCADE, related_name='toys_by_brend')
-    categories = models.ManyToManyField(Category, through='ToyCategory', related_name='toys_by_category')
+    name = models.CharField(max_length=100, verbose_name='Название')
+    price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Цена')
+    count = models.PositiveIntegerField(verbose_name='Количество')
+    brend = models.ForeignKey(Brend, on_delete=models.CASCADE, related_name='toys_by_brend', verbose_name='Бренд')
+    categories = models.ManyToManyField(Category, related_name='toys_by_category', verbose_name='Катерогия')
     gender = models.TextField(
         choices=GenderChoices.choices,
-        default=GenderChoices.MW
+        default=GenderChoices.MW,
+        verbose_name='Для кого',
     )
-    discription = models.TextField(blank=True, null=True)
+    discription = models.TextField(blank=True, null=True, verbose_name='Описание')
     # visible = models.BooleanField(default=True)
 
     class Meta:
@@ -52,14 +53,14 @@ class Toy(models.Model):
         return self.name
 
 
-# В этой модели будут связаны id игрушки и id его категории
-class ToyCategory(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    toy = models.ForeignKey(Toy, on_delete=models.CASCADE)
-    date = models.DateTimeField()  # дата поступления игрушки в магазин
-
-    def __str__(self):
-        return f'{self.toy}, {self.category}'
+# # В этой модели будут связаны id игрушки и id его категории
+# class ToyCategory(models.Model):
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+#     toy = models.ForeignKey(Toy, on_delete=models.CASCADE)
+#     date = models.DateTimeField()  # дата поступления игрушки в магазин
+#
+#     def __str__(self):
+#         return f'{self.toy}, {self.category}'
 
 
 class OrderStatusChoices(models.TextChoices):
