@@ -41,9 +41,7 @@ class ToySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Toy
-        # fields = ('name', 'price', 'brend', 'discription')
         fields = '__all__'
-
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -55,3 +53,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('product', 'quantity',)
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    pass
