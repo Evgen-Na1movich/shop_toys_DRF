@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -44,7 +45,7 @@ class Toy(models.Model):
         verbose_name='Для кого',
     )
     discription = models.TextField(blank=True, null=True, verbose_name='Описание')
-    # visible = models.BooleanField(default=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Игрушки'

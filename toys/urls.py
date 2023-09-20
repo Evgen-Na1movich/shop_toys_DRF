@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from toys.views import ToyViewSet, CategoryViewSet, BrendViewSet
 from rest_framework import routers
 
@@ -11,4 +11,7 @@ print(router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('api/auth-token/', include('djoser.urls.authtoken')),
+    path('auth/', include('djoser.urls')),
+
 ]

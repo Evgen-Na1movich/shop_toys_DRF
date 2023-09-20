@@ -11,16 +11,31 @@ class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def get_permissions(self):
+        """Получение прав для действий."""
+        if self.action in ["create", "update", "partial_update", "destroy"]:
+            return [IsAdminUser()]
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]
+        return []
+
 
 class BrendViewSet(ModelViewSet):
     queryset = Brend.objects.all()
     serializer_class = BrendSerializer
 
+    def get_permissions(self):
+        """Получение прав для действий."""
+        if self.action in ["create", "update", "partial_update", "destroy"]:
+            return [IsAdminUser()]
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]
+        return []
+
 
 class ToyViewSet(ModelViewSet):
     queryset = Toy.objects.all()
     serializer_class = ToySerializer
-
 
     def get_permissions(self):
         """Получение прав для действий."""

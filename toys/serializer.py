@@ -16,18 +16,18 @@ class CategorySerializer(serializers.ModelSerializer):
     """Serializer для категорий."""
 
     # Вместо id возвращается строковое представление объекта.
-    # toys_by_category = serializers.StringRelatedField(many=True, read_only=True)
+    toys_by_category = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Category
-        fields = ('id', 'name')
+        fields = ('name', 'toys_by_category')
 
 
 class BrendSerializer(serializers.ModelSerializer):
     """Serializer для бренда."""
 
     # Вместо id возвращается строковое представление объекта.
-    # toys_by_brend = serializers.StringRelatedField(many=True, read_only=True)
+    toys_by_brend = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Brend
@@ -37,34 +37,17 @@ class BrendSerializer(serializers.ModelSerializer):
 class ToySerializer(serializers.ModelSerializer):
     """Serializer для товара(игрушек)."""
     categories = CategorySerializer(many=True)
-
-    # brend = serializers.StringRelatedField(read_only=True)
+    brend = serializers.StringRelatedField()
 
     class Meta:
         model = Toy
-        fields = "__all__"
+        # fields = ('name', 'price', 'brend', 'discription')
+        fields = '__all__'
 
-    # def create(self, validated_data):
-    #     # Уберем список категорий из словаря validated_data и сохраним его
-    #     categories = validated_data.pop('categories')
-    #     # создаем новую игрушку без категории
-    #     toy = Toy.objects.create(**validated_data)
-    #
-    #     # Для каждой категории из списка категорий
-    #     for category in categories:
-    #         # Создадим новую запись или получим существующий экземпляр из БД
-    #         current_categories, status = Category.objects.create(
-    #             **categories)
-    #         # Поместим ссылку на каждую категорию во вспомогательную таблицу
-    #         # Не забыв указать к какой игрушке оно относится
-    #         Toy.objects.create(
-    #             category=current_categories, toy=toy)
-    #     return toy
 
 
 class ItemSerializer(serializers.ModelSerializer):
     """Serializer для позиции."""
-
     product = serializers.PrimaryKeyRelatedField(
         queryset=Toy.objects.all(),
         required=True)
