@@ -50,7 +50,7 @@ class ToyViewSet(ModelViewSet):
 
 
 class IsOwnerOrAdmin(permissions.BasePermission):
-    """Класс разрешений для владельца объекта"""
+    """Класс разрешений для владельца """
     def has_object_permission(self, request, view, obj):
         if request.user.is_staff:
             return True
