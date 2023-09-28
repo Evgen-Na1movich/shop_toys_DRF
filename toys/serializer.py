@@ -36,80 +36,59 @@ class BrendSerializer(serializers.ModelSerializer):
 
 class ToySerializer(serializers.ModelSerializer):
     """Serializer для товара(игрушек)."""
-    categories = CategorySerializer(many=True)
+    # categories = CategorySerializer(many=True)
     brend = serializers.StringRelatedField()
 
     class Meta:
         model = Toy
-        fields = '__all__'
+        fields = ('name', 'price', 'brend', 'discription',)
 
 
 class ItemSerializer(serializers.ModelSerializer):
     """Serializer для позиции."""
+    # этот тип поля в сериализаторе оперирует первичными ключами (id) связанного объекта
+    # Когда добавляем игрушку в позицию, то указываем ее id
     product = serializers.PrimaryKeyRelatedField(
         queryset=Toy.objects.all(),
         required=True)
+    print(f'product - {product}')
 
     class Meta:
         model = Item
         fields = ('product', 'quantity',)
 
 
-# class OrderSerializer(serializers.ModelSerializer):
-#     """Serializer для заказа."""
-
-    # creator = UserSerializer(read_only=True)
-    # positions = ItemSerializer(many=True)
-    #
-    # class Meta:
-    #     model = Order
-    #     fields = ('id', 'creator', 'positions', 'status', 'total_price', 'created_at', 'updated_at',)
-    #
-    # def create(self, validated_data):
-    #     """Метод создания заказа"""
-    #     validated_data["creator"] = self.context["request"].user
-    #     positions_data = validated_data.pop('positions')
-    #     order = super().create(validated_data)
-    #     print(order)
-    #
-    #
-    #     raw_positions = []
-    #     for position in positions_data:
-    #         position = Item(order=order,
-    #                         product=position["product"],
-    #                         quantity=position["quantity"],
-    #                         price=position["product"].price)
-    #         raw_positions.append(position)
-    #     Item.objects.bulk_create(raw_positions)
-    #     print(order)
-    #     return order
-
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer для заказа."""
 
-    creator = UserSerializer(read_only=True)
-    positions = ItemSerializer(many=True)
+    creator = UserSerializer(read_only=True, required=False)
+    positions = ItemSerializer(many=True, required=False,  default=None)
 
     class Meta:
         model = Order
         fields = ('id', 'creator', 'positions', 'status', 'total_price', 'created_at', 'updated_at',)
 
     def create(self, validated_data):
-        """Метод создания заказа"""
+        #     """Метод создания заказа"""
         validated_data["creator"] = self.context["request"].user
         positions_data = validated_data.pop('positions')
-        order = super().create(validated_data)
-        order.save()  # Сохранение заказа перед использованием отношения 'products'
-
-        raw_positions = []
-        for position in positions_data:
-            position = Item(order=order,
-                            product=position["product"],
-                            quantity=position["quantity"],
-                            price=position["product"].price)
-            raw_positions.append(position)
-        Item.objects.bulk_create(raw_positions)
+        order = Order.objects.create(**validated_data)
+        order.save()
+        for positions_data in positions_data:
+            Item.objects.create(order=order, **positions_data)
+        # raw_positions = []
+        # for position in positions_data:
+        #     print(f'position - {position}')
+        #     position = Item(order=order,
+        #                     product=position["product"],
+        #                     quantity=position["quantity"],
+        #                     price=position["product"].price)
+        #     raw_positions.append(position)
+        #     print(raw_positions)
+        # Item.objects.bulk_create(raw_positions)
         return order
+
+
 
     def update(self, instance, validated_data):
         """Метод для обновления"""

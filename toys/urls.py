@@ -8,7 +8,7 @@ router.register('cats', CategoryViewSet)
 router.register('brend', BrendViewSet)
 router.register('orders', OrderViewSet, basename='orders')
 
-print(router.urls)
+# print(router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),

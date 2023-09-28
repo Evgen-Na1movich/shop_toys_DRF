@@ -78,9 +78,6 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        pass
-
     def save(self, *args, **kwargs):
         self.total_price = sum(item.get_cost() for item in self.positions.all())
         self.total_items = sum(item.quantity for item in self.positions.all())
@@ -104,3 +101,5 @@ class Item(models.Model):
         if self.price is None:
             self.price = self.product.price
         super(Item, self).save(*args, **kwargs)
+
+

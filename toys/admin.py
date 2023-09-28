@@ -3,7 +3,7 @@ from django.contrib import admin
 from toys.models import Brend, Toy, Category, Item, Order
 
 # Register your models here.
-admin.site.register(Toy)
+# admin.site.register(Toy)
 admin.site.register(Brend)
 admin.site.register(Category)
 
@@ -13,6 +13,11 @@ class ItemInline(admin.TabularInline):
     fields = ['product', 'quantity', 'price']
     raw_id_fields = ['product']
     readonly_fields = ['price']
+
+
+@admin.register(Toy)
+class ProductAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Order)
