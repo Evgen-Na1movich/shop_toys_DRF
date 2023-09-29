@@ -73,15 +73,11 @@ class Order(models.Model):
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.NEW
     )
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, default=0)
     total_items = models.PositiveSmallIntegerField(default=0)
+    adress = models.CharField(max_length=255, default="Minsk")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        self.total_price = sum(item.get_cost() for item in self.positions.all())
-        self.total_items = sum(item.quantity for item in self.positions.all())
-        super(Order, self).save(*args, **kwargs)
 
 
 class Item(models.Model):
@@ -97,9 +93,12 @@ class Item(models.Model):
     def get_cost(self):
         return self.price * self.quantity
 
+#типа когда в заказ добаляется что то то и общая сумма и количество пересчитывается в заказе
     def save(self, *args, **kwargs):
         if self.price is None:
             self.price = self.product.price
+            self.order.total_price = sum(item.get_cost() for item in self.price)
+            self.total_items = sum(item.quantity for item in self.product.all())
         super(Item, self).save(*args, **kwargs)
 
 
