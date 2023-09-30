@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
+from django.db.models.functions import datetime
 from rest_framework import serializers
+from rest_framework.response import Response
 
 from toys.models import Toy, Brend, Category, Item, Order
 
@@ -55,34 +57,6 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = ('product', 'quantity',)
 
 
-# class OrderSerializer(serializers.ModelSerializer):
-#     """Serializer для заказа."""
-
-    # creator = UserSerializer(read_only=True)
-    # positions = ItemSerializer(many=True)
-    #
-    # class Meta:
-    #     model = Order
-    #     fields = ('id', 'creator', 'positions', 'status', 'total_price', 'created_at', 'updated_at',)
-    #
-    # def create(self, validated_data):
-    #     """Метод создания заказа"""
-    #     validated_data["creator"] = self.context["request"].user
-    #     positions_data = validated_data.pop('positions')
-    #     order = super().create(validated_data)
-    #     print(order)
-    #
-    #
-    #     raw_positions = []
-    #     for position in positions_data:
-    #         position = Item(order=order,
-    #                         product=position["product"],
-    #                         quantity=position["quantity"],
-    #                         price=position["product"].price)
-    #         raw_positions.append(position)
-    #     Item.objects.bulk_create(raw_positions)
-    #     print(order)
-    #     return order
 
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer для заказа."""

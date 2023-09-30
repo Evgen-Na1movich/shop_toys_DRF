@@ -1,6 +1,8 @@
+from django.db.models.functions import datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from rest_framework.viewsets import ModelViewSet
 
@@ -47,6 +49,14 @@ class ToyViewSet(ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return [AllowAny()]
         return []
+    # def get_queryset(self):
+    #     queryset = Toy.objects.all()
+    #     now = datetime.datetime.now()
+    #     hour_now = now.hour
+    #     if 8< hour_now < 12:
+    #         return queryset
+    #     else:
+    #         return Response({'message': 'пшел вон, я сплю'})
 
 
 class IsOwnerOrAdmin(permissions.BasePermission):
