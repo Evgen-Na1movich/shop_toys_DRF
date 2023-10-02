@@ -22,6 +22,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['created_at', 'creator', 'total_items', 'status', 'total_price']
+    list_display = ['created_at', 'creator', 'status', 'total_price']
     list_filter = ['created_at']
     inlines = [ItemInline]
+
+
+

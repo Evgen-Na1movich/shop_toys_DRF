@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from toys.filters import ToysFilter, OrderFilter
 from toys.models import Toy, Brend, Category, Order
-from toys.serializer import ToySerializer, BrendSerializer, CategorySerializer, OrderSerializer
+from toys.serializer import ToySerializer, BrendSerializer, CategorySerializer, OrderSerializer, ItemSerializer
 
 
 class CategoryViewSet(ModelViewSet):
@@ -50,15 +50,6 @@ class ToyViewSet(ModelViewSet):
             return [AllowAny()]
         return []
 
-    # def get_queryset(self):
-    #     queryset = Toy.objects.all()
-    #     now = datetime.datetime.now()
-    #     hour_now = now.hour
-    #     if 8< hour_now < 12:
-    #         return queryset
-    #     else:
-    #         return Response({'message': 'пшел вон, я сплю'})
-
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """Класс разрешений для владельца """
@@ -84,3 +75,9 @@ class OrderViewSet(ModelViewSet):
         if self.action in ["retrieve", "update", "partial_update", "destroy"]:
             return [IsOwnerOrAdmin()]
         return []
+
+
+class ItemViewSet(ModelViewSet):
+    """ViewSet для заказа"""
+    queryset = Order.objects.all()
+    serializer_class = ItemSerializer
