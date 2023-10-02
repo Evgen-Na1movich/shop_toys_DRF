@@ -1,1 +1,21 @@
+
+
 http://127.0.0.1:8000/api/auth-token/token/login/
+
+### Send POST request with body as parameters
+POST http://127.0.0.1:8000/toys/9/
+
+{
+	"id": 9,
+	"brend": 3,
+	"name": "Test_toy_9",
+	"price": "19.69",
+	"count": 5,
+	"gender": "Для девочек",
+	"discription": "text for Test_toy_9",
+	"user": 1,
+	"categories": [
+		5,
+		4
+	]
+}
