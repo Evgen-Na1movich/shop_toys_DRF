@@ -38,12 +38,12 @@ class BrendSerializer(serializers.ModelSerializer):
 
 class ToySerializer(serializers.ModelSerializer):
     """Serializer для товара(игрушек)."""
-    # categories = CategorySerializer(many=True)
+    categories = CategorySerializer(many=True, read_only=True)
     brend = serializers.StringRelatedField()
 
     class Meta:
         model = Toy
-        fields = ('name', 'price', 'brend', 'discription')
+        fields = ('name', 'price', 'brend', 'discription', 'categories')
 
 
 class ItemSerializer(serializers.ModelSerializer):
