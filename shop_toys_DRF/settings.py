@@ -149,7 +149,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # добавление пагинации. позволяет контролировать количество возвращаемых объектов на странице
@@ -161,3 +161,13 @@ INTERNAL_IPS = [
     "127.0.0.1",
 
 ]
+
+#Email.settings
+EMAIL_HOST= 'smpt.sendgrit.net'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+FROM_EMAIL = ''
+EMAIL_ADMIN = ''

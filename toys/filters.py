@@ -25,4 +25,5 @@ class OrderFilter(filters.FilterSet):
 
     class Meta:
         model = Order
+
         fields = ('status', 'price_from', 'price_to', 'products', 'created_at', 'updated_at',)

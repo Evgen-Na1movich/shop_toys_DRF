@@ -71,7 +71,7 @@ class Order(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    # products = models.ManyToManyField(Item, related_name='positions')
+    # products = models.ManyToManyField(Item, related_name='positions',)
     status = models.TextField(
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.NEW

@@ -1,1 +1,99 @@
-http://127.0.0.1:8000/api/auth-token/token/login/
+# примеры API-запросов
+
+#регистрация пользователя
+
+POST http://localhost:8000/auth/users/
+Content-Type: application/json
+
+{
+  "email": "potter@hogvards.com",
+  "username": "Harry",
+  "password": "ilovemagic"
+}
+
+###
+
+# получение списка товаров
+GET http://localhost:8000/toys/
+Content-Type: application/json
+
+###
+
+# получение товара
+GET http://localhost:8000/toys/1/
+Content-Type: application/json
+
+###
+
+# создание товара
+POST http://localhost:8000/toys/
+Content-Type: application/json
+
+{
+  "brend": 3,
+  "name": "Test_toy",
+  "price": "19.69",
+  "count": 5,
+  "gender": "Для девочек",
+  "discription": "text for Test_toy",
+  "user": 1,
+  "categories": [
+    5,
+    4
+  ]
+}
+
+###
+
+# создание заказа
+POST http://localhost:8000/orders/
+Content-Type: application/json
+Authorization: Token 9895809c333f3c134920f06273e0d1e1431473b9
+
+{
+  "positions": [
+    {
+      "product": 1,
+      "quantity": 4
+    },
+    {
+      "product": 4,
+      "quantity": 3
+    }
+  ],
+  "adress": "Тисовая улица, 4"
+}
+
+
+###
+
+# получение списка заказов админом
+GET http://localhost:8000/orders/
+Content-Type: application/json
+Authorization: Token 55fb537e32bba0ef908b698e46c66f70e5ceca61
+
+
+###
+
+# попытка удалить заказ
+DELETE http://localhost:8000/orders/3/
+Content-Type: application/json
+Authorization: Token 9895809c333f3c134920f06273e0d1e1431473b9
+
+
+
+
+###
+
+# фильтрация заказов по статусу
+GET http://localhost:8000/orders/?status=Новый
+Content-Type: application/json
+Authorization: Token 55fb537e32bba0ef908b698e46c66f70e5ceca61
+
+###
+
+
+
+# фильтрация товаров по цене
+GET http://localhost:8000/toys/?price_to=30
+Content-Type: application/json
