@@ -1,7 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models.functions import datetime
 from rest_framework import serializers
-from rest_framework.response import Response
 
 from toys.models import Toy, Brend, Category, Item, Order
 

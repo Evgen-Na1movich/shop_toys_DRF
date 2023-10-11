@@ -81,8 +81,6 @@ Content-Type: application/json
 Authorization: Token 9895809c333f3c134920f06273e0d1e1431473b9
 
 
-
-
 ###
 
 # фильтрация заказов по статусу

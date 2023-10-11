@@ -1,8 +1,5 @@
-from django.db.models.functions import datetime
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
-from rest_framework.response import Response
 
 from rest_framework.viewsets import ModelViewSet
 

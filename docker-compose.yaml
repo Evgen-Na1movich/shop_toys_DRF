@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_shop_toys
+    volumes:
+      - ./src:/src
+    ports:
+      - 8000:8000
+    env_file:
+      - postgres_keys.txt
+    depends_on:
+      - db
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+
+
+
+  db:
+    image: postgres
+    container_name: postgres_shop_toys
+    env_file:
+      - postgres_keys.txt
+    volumes:
+      - ./backups:/backups
+    ports:
+      - "5433:5432"
