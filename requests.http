@@ -88,6 +88,7 @@ GET http://localhost:8000/orders/?status=Новый
 Content-Type: application/json
 Authorization: Token 55fb537e32bba0ef908b698e46c66f70e5ceca61
 
+
 ###
 
 
