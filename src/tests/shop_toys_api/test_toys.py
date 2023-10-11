@@ -22,7 +22,7 @@ def test_get_list_toys_price(api_client):
 
 @pytest.mark.django_db
 def test_get_list_toys_by_brend(api_client):
-    """Тест получения всех товаров с ценной меньше или равно 30"""
+    """Тест получения всех товаров по бренду"""
     url = 'http://localhost:8000/brend/?brend=Lego'
     responce = api_client.get(url)
     assert responce.status_code == HTTP_200_OK
